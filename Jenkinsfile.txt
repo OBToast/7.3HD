@@ -6,6 +6,7 @@ pipeline {
 
     tools {
         jdk 'Java 17' // The JDK you configured in Jenkins
+        sonarScanner 'SonarQube'
     }
 
     stages {
