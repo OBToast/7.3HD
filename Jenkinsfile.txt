@@ -6,7 +6,7 @@ pipeline {
 
     tools {
         jdk 'Java 17'           // Your configured JDK
-        sonarScanner 'SonarQube' // Auto-installed SonarScanner
+        sonarScanner 'SonarQube' // Name you gave in Jenkins Global Tool Config
     }
 
     stages {
@@ -27,8 +27,7 @@ pipeline {
         stage('SonarCloud Analysis') {
             steps {
                 echo 'Running SonarCloud analysis...'
-                // Put CLI command all on one line to avoid Windows line continuation issues
-                bat "sonar-scanner -Dsonar.projectKey=springpetclinic -Dsonar.organization=OBToast -Dsonar.sources=src -Dsonar.java.binaries=target/classes -Dsonar.login=%SONAR_TOKEN%"
+                bat 'sonar-scanner -Dsonar.projectKey=springpetclinic -Dsonar.organization=OBToast -Dsonar.sources=src -Dsonar.java.binaries=target/classes -Dsonar.login=%SONAR_TOKEN%'
             }
         }
     }
