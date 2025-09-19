@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    environment {
+    SONAR_TOKEN = credentials('SONAR_TOKEN_HD')
+}
+
+    tools {
+        jdk 'Java 17' // The JDK you configured in Jenkins
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                bat '.\\mvnw.cmd clean package -DskipTests'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running unit tests...'
+                bat '.\\mvnw.cmd test'
+            }
+        }
+        stage('SonarCloud Analysis') {
+            steps {
+                echo 'Running SonarCloud analysis...'
+                bat """
+                REM Run SonarScanner
+                sonar-scanner ^
+                -Dsonar.projectKey=springpetclinic ^
+                -Dsonar.organization=OBToast ^
+                -Dsonar.sources=src ^
+                -Dsonar.java.binaries=target/classes ^
+                -Dsonar.login=%SONAR_TOKEN%
+                """
+            }
+        }
+    }
+}
